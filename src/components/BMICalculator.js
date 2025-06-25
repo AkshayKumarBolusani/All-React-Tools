@@ -1,82 +1,110 @@
 // BMICalculator.js
 import React, { useState } from 'react';
-
-const styles = {
-  container: {
-    textAlign: 'center',
-    marginTop: '50px',
-  },
-  title: {
-    fontSize: '24px',
-    marginBottom: '20px',
-  },
-  input: {
-    width: '20%',
-    padding: '8px',
-    marginLeft: '10px',
-    marginBottom: '15px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    boxSizing: 'border-box',
-  },
-  button: {
-    backgroundColor: '#e50914',
-    color: 'white',
-    padding: '10px 15px',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '16px',
-  },
-  resultContainer: {
-    marginTop: '20px',
-  },
-  resultTitle: {
-    fontSize: '18px',
-    marginBottom: '10px',
-  },
-};
+import '../styles/CommonLayout.css';
+import bg from '../assets/images/bg.jpg';
+import girl from '../assets/images/girl.png';
+import trees from '../assets/images/trees.png';
+import leafImage from '../assets/images/leaf_01.png';
+import leafImage2 from '../assets/images/leaf_02.png';
+import leafImage3 from '../assets/images/leaf_03.png';
+import leafImage4 from '../assets/images/leaf_04.png';
+import BackButton from './BackButton';
 
 const BMICalculator = () => {
-  const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState('');
   const [bmi, setBMI] = useState(null);
+  const [category, setCategory] = useState('');
 
   const calculateBMI = () => {
+    if (!weight || !height) {
+      alert('Please enter both weight and height');
+      return;
+    }
+
     const heightInMeters = height / 100;
-    const bmiValue = weight / (heightInMeters * heightInMeters);
-    setBMI(bmiValue.toFixed(2));
+    const bmiValue = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+    setBMI(bmiValue);
+
+    // Determine BMI category
+    if (bmiValue < 18.5) setCategory('Underweight');
+    else if (bmiValue < 25) setCategory('Normal weight');
+    else if (bmiValue < 30) setCategory('Overweight');
+    else setCategory('Obese');
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>BMI Calculator</h2>
-      <label htmlFor="height">Enter your height (in cm):</label>
-      <input
-        style={styles.input}
-        type="number"
-        id="height"
-        value={height}
-        onChange={(e) => setHeight(e.target.value)}
-      /><br></br>
-      <label htmlFor="weight">Enter your weight (in kg):</label>
-      <input
-        style={styles.input}
-        type="number"
-        id="weight"
-        value={weight}
-        onChange={(e) => setWeight(e.target.value)}
-      /><br></br>
-      <button style={styles.button} onClick={calculateBMI}>
-        Calculate BMI
-      </button>
+    <div className="page-container">
+      <BackButton />
+      <img src={bg} className="bg" alt="Background" />
+      <img src={trees} className="trees" alt="Trees" />
+      <img src={girl} className="girl" alt="Girl" />
 
-      {bmi !== null && (
-        <div style={styles.resultContainer}>
-          <h3 style={styles.resultTitle}>Your BMI is:</h3>
-          <p>{bmi}</p>
+      <div className="leaves">
+        <div className="set">
+          <div><img src={leafImage} alt="leaf" /></div>
+          <div><img src={leafImage2} alt="leaf" /></div>
+          <div><img src={leafImage3} alt="leaf" /></div>
+          <div><img src={leafImage4} alt="leaf" /></div>
+          <div><img src={leafImage} alt="leaf" /></div>
+          <div><img src={leafImage2} alt="leaf" /></div>
+          <div><img src={leafImage3} alt="leaf" /></div>
+          <div><img src={leafImage4} alt="leaf" /></div>
         </div>
-      )}
+      </div>
+
+      <div className="content-container">
+        <div className="header-section">
+          <h1 className="page-title">BMI Calculator</h1>
+          <p style={{ textAlign: 'center', fontSize: '0.9em', color: '#8f2c24', marginTop: '10px' }}>
+            Calculate your Body Mass Index (BMI)
+          </p>
+        </div>
+
+        <div className="scrollable-content">
+          <div className="form-group">
+            <label className="form-label" htmlFor="weight">
+              Weight (kg):
+            </label>
+            <input
+              className="form-input"
+              type="number"
+              id="weight"
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}
+              placeholder="Enter your weight in kilograms"
+              style={{ color: '#8f2c24' }}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="height">
+              Height (cm):
+            </label>
+            <input
+              className="form-input"
+              type="number"
+              id="height"
+              value={height}
+              onChange={(e) => setHeight(e.target.value)}
+              placeholder="Enter your height in centimeters"
+              style={{ color: '#8f2c24' }}
+            />
+          </div>
+
+          <button className="form-button" onClick={calculateBMI}>
+            Calculate BMI
+          </button>
+
+          {bmi && (
+            <div className="result-text">
+              <h3>Your BMI Results:</h3>
+              <p>BMI: {bmi}</p>
+              <p>Category: {category}</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

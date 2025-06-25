@@ -1,5 +1,13 @@
-// AgeCalculator.js
 import React, { useState } from 'react';
+import '../styles/CommonLayout.css';
+import bg from '../assets/images/bg.jpg';
+import girl from '../assets/images/girl.png';
+import trees from '../assets/images/trees.png';
+import leafImage from '../assets/images/leaf_01.png';
+import leafImage2 from '../assets/images/leaf_02.png';
+import leafImage3 from '../assets/images/leaf_03.png';
+import leafImage4 from '../assets/images/leaf_04.png';
+import BackButton from './BackButton';
 
 const getFormattedDate = (date) => {
   const year = date.getFullYear();
@@ -48,92 +56,112 @@ const AgeCalculator = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Age Calculator</h2>
-      <label style={styles.label} htmlFor="birthdate">
-        Enter your birthdate:
-      </label>
-      <input
-        style={styles.input}
-        type="date"
-        id="birthdate"
-        value={birthdate}
-        onChange={(e) => setBirthdate(e.target.value)}
-      />
-      <label style={styles.label} htmlFor="todayDate">
-        Enter today's date:
-      </label>
-      <input
-        style={styles.input}
-        type="date"
-        id="todayDate"
-        value={todayDate}
-        onChange={(e) => setTodayDate(e.target.value)}
-      />
-      <button style={styles.button} onClick={calculateAge}>
-        Calculate Age
-      </button>
+    <div className="page-container">
+      <BackButton />
+      <img src={bg} className="bg" alt="Background" />
+      <img src={trees} className="trees" alt="Trees" />
+      <img src={girl} className="girl" alt="Girl" />
 
-      {age.years !== null && (
-        <div style={styles.resultContainer}>
-          <h3 style={styles.resultTitle}>Your age is:</h3>
-          <p>Years: {age.years}</p>
-          <p>Months: {age.months}</p>
-          <p>Days: {age.days}</p>
+      <div className="leaves">
+        <div className="set">
+          <div><img src={leafImage} alt="leaf" /></div>
+          <div><img src={leafImage2} alt="leaf" /></div>
+          <div><img src={leafImage3} alt="leaf" /></div>
+          <div><img src={leafImage4} alt="leaf" /></div>
+          <div><img src={leafImage} alt="leaf" /></div>
+          <div><img src={leafImage2} alt="leaf" /></div>
+          <div><img src={leafImage3} alt="leaf" /></div>
+          <div><img src={leafImage4} alt="leaf" /></div>
         </div>
-      )}
+      </div>
+
+      <div className="content-container">
+        <div className="header-section">
+          <h1 className="page-title">Age Calculator</h1>
+          <p style={{ textAlign: 'center', fontSize: '0.9em', color: '#8f2c24', marginTop: '10px' }}>
+            Calculate your exact age in years, months, and days
+          </p>
+        </div>
+
+        <div className="scrollable-content">
+          <div className="form-group">
+            <label className="form-label" htmlFor="birthdate">
+              Enter your birthdate:
+            </label>
+            <div style={{ position: 'relative' }}>
+              <input
+                className="form-input"
+                type="date"
+                id="birthdate"
+                value={birthdate}
+                onChange={(e) => setBirthdate(e.target.value)}
+                style={{
+                  color: '#8f2c24',
+                  fontFamily: 'inherit',
+                  cursor: 'pointer',
+                  paddingRight: '30px'
+                }}
+              />
+              <div style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                pointerEvents: 'none',
+                color: '#8f2c24'
+              }}>
+                📅
+              </div>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="todayDate">
+              Enter today's date:
+            </label>
+            <div style={{ position: 'relative' }}>
+              <input
+                className="form-input"
+                type="date"
+                id="todayDate"
+                value={todayDate}
+                onChange={(e) => setTodayDate(e.target.value)}
+                style={{
+                  color: '#8f2c24',
+                  fontFamily: 'inherit',
+                  cursor: 'pointer',
+                  paddingRight: '30px'
+                }}
+              />
+              <div style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                pointerEvents: 'none',
+                color: '#8f2c24'
+              }}>
+                📅
+              </div>
+            </div>
+          </div>
+
+          <button className="form-button" onClick={calculateAge}>
+            Calculate Age
+          </button>
+
+          {age.years !== null && (
+            <div className="result-text">
+              <h3>Your age is:</h3>
+              <p>Years: {age.years}</p>
+              <p>Months: {age.months}</p>
+              <p>Days: {age.days}</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
-
-const styles = {
-    container: {
-      maxWidth: '400px',
-      margin: 'auto',
-      padding: '20px',
-      border: '1px solid #ccc',
-      borderRadius: '8px',
-      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    },
-    title: {
-      fontSize: '24px',
-      marginBottom: '20px',
-      textAlign: 'center',
-    },
-    label: {
-      display: 'block',
-      marginBottom: '5px',
-    },
-    input: {
-      width: '100%',
-      padding: '8px',
-      marginBottom: '15px',
-      borderRadius: '4px',
-      border: '1px solid #ccc',
-      boxSizing: 'border-box',
-    },
-    button: {
-      backgroundColor: '#e50914',
-      textAlign: 'center',
-      color: 'white',
-      padding: '10px 15px',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      fontSize: '16px',
-      transition: 'background-color 0.3s ease-in-out', // Smooth transition effect
-    },
-    'button:hover': {
-      backgroundColor: '#ff4500', // Change the color on hover
-    },
-    resultContainer: {
-      marginTop: '20px',
-    },
-    resultTitle: {
-      fontSize: '18px',
-      marginBottom: '10px',
-    },
-  };
-  
 
 export default AgeCalculator;

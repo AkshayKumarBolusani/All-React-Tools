@@ -1,147 +1,186 @@
 import React, { useState } from 'react';
-
-const styles = {
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        background: '#141414', // Dark background color
-        color: '#fff', // White text color
-        padding: '20px',
-        fontFamily: 'Arial, sans-serif',
-      },
-  title: {
-    fontSize: '32px',
-    marginBottom: '20px',
-  },
-  label: {
-    display: 'block',
-    marginBottom: '5px',
-  },
-  input: {
-    width: '20%',
-    padding: '8px',
-    fontSize: '20px',
-    marginLeft: '10px',
-    marginBottom: '15px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    boxSizing: 'border-box',
-  },
-  checkboxLabel: {
-    display: 'block',
-    marginBottom: '10px',
-  },
-  checkbox: {
-    marginRight: '5px',
-    fontSize: '32px',
-  },
-  button: {
-    backgroundColor: '#e50914',
-    color: 'white',
-    padding: '10px 15px',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '16px',
-    transition: 'background-color 0.3s ease-in-out', // Smooth transition effect
-  },
-  'button-hover': {
-    backgroundColor: '#ff4500', // Change the color on hover
-  },
-  resultContainer: {
-    marginTop: '20px',
-  },
-  resultTitle: {
-    fontSize: '18px',
-    marginBottom: '10px',
-  },
-};
+import '../styles/CommonLayout.css';
+import bg from '../assets/images/bg.jpg';
+import girl from '../assets/images/girl.png';
+import trees from '../assets/images/trees.png';
+import leafImage from '../assets/images/leaf_01.png';
+import leafImage2 from '../assets/images/leaf_02.png';
+import leafImage3 from '../assets/images/leaf_03.png';
+import leafImage4 from '../assets/images/leaf_04.png';
+import BackButton from './BackButton';
 
 const PasswordGenerator = () => {
-  const [passwordLength, setPasswordLength] = useState(12);
+  const [password, setPassword] = useState('');
+  const [length, setLength] = useState(12);
   const [includeUppercase, setIncludeUppercase] = useState(true);
+  const [includeLowercase, setIncludeLowercase] = useState(true);
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeSymbols, setIncludeSymbols] = useState(true);
-  const [generatedPassword, setGeneratedPassword] = useState('');
+  const [copied, setCopied] = useState(false);
 
   const generatePassword = () => {
-    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
-    const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const numberChars = '0123456789';
-    const symbolChars = '!@#$%^&*()_-+=<>?/{}';
-
-    let validChars = lowercaseChars;
-    if (includeUppercase) validChars += uppercaseChars;
-    if (includeNumbers) validChars += numberChars;
-    if (includeSymbols) validChars += symbolChars;
-
+    let charset = '';
     let newPassword = '';
-    for (let i = 0; i < passwordLength; i++) {
-      const randomIndex = Math.floor(Math.random() * validChars.length);
-      newPassword += validChars[randomIndex];
+
+    if (includeLowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
+    if (includeUppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (includeNumbers) charset += '0123456789';
+    if (includeSymbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+    if (charset === '') {
+      alert('Please select at least one character type');
+      return;
     }
 
-    setGeneratedPassword(newPassword);
+    for (let i = 0; i < length; i++) {
+      newPassword += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+
+    setPassword(newPassword);
+    setCopied(false);
+  };
+
+  const copyToClipboard = () => {
+    if (password) {
+      navigator.clipboard.writeText(password);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Password Generator</h2>
+    <div className="page-container">
+      <BackButton />
+      <img src={bg} className="bg" alt="Background" />
+      <img src={trees} className="trees" alt="Trees" />
+      <img src={girl} className="girl" alt="Girl" />
 
-      <label style={styles.label} htmlFor="passwordLength">
-        Password Length:
-      </label>
-      <input
-        style={styles.input}
-        type="number"
-        id="passwordLength"
-        value={passwordLength}
-        onChange={(e) => setPasswordLength(e.target.value)}
-      />
-
-      <label style={styles.checkboxLabel}>
-        <input
-          style={styles.checkbox}
-          type="checkbox"
-          checked={includeUppercase}
-          onChange={() => setIncludeUppercase(!includeUppercase)}
-        />
-        Include Uppercase
-      </label>
-
-      <label style={styles.checkboxLabel}>
-        <input
-          style={styles.checkbox}
-          type="checkbox"
-          checked={includeNumbers}
-          onChange={() => setIncludeNumbers(!includeNumbers)}
-        />
-        Include Numbers
-      </label>
-
-      <label style={styles.checkboxLabel}>
-        <input
-          style={styles.checkbox}
-          type="checkbox"
-          checked={includeSymbols}
-          onChange={() => setIncludeSymbols(!includeSymbols)}
-        />
-        Include Symbols
-      </label>
-
-      <button style={styles.button} onClick={generatePassword}>
-        Generate Password
-      </button>
-
-      {generatedPassword && (
-        <div style={styles.resultContainer}>
-          <h3 style={styles.resultTitle}>Generated Password:</h3>
-          <p>{generatedPassword}</p>
+      <div className="leaves">
+        <div className="set">
+          <div><img src={leafImage} alt="leaf" /></div>
+          <div><img src={leafImage2} alt="leaf" /></div>
+          <div><img src={leafImage3} alt="leaf" /></div>
+          <div><img src={leafImage4} alt="leaf" /></div>
+          <div><img src={leafImage} alt="leaf" /></div>
+          <div><img src={leafImage2} alt="leaf" /></div>
+          <div><img src={leafImage3} alt="leaf" /></div>
+          <div><img src={leafImage4} alt="leaf" /></div>
         </div>
-      )}
+      </div>
+
+      <div className="content-container">
+        <div className="header-section">
+          <h1 className="page-title">Password Generator</h1>
+          <p style={{ textAlign: 'center', fontSize: '0.9em', color: '#8f2c24', marginTop: '10px' }}>
+            Create strong and secure passwords instantly
+          </p>
+        </div>
+
+        <div className="scrollable-content">
+          <div className="form-group">
+            <label className="form-label" htmlFor="length">
+              Password Length: {length}
+            </label>
+            <input
+              type="range"
+              id="length"
+              min="8"
+              max="32"
+              value={length}
+              onChange={(e) => setLength(parseInt(e.target.value))}
+              style={{
+                width: '100%',
+                height: '8px',
+                borderRadius: '4px',
+                outline: 'none',
+                opacity: '0.7',
+                transition: 'opacity .2s',
+                accentColor: '#8f2c24'
+              }}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Include Characters:</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#8f2c24' }}>
+                <input
+                  type="checkbox"
+                  checked={includeUppercase}
+                  onChange={(e) => setIncludeUppercase(e.target.checked)}
+                  style={{ accentColor: '#8f2c24' }}
+                />
+                Uppercase (A-Z)
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#8f2c24' }}>
+                <input
+                  type="checkbox"
+                  checked={includeLowercase}
+                  onChange={(e) => setIncludeLowercase(e.target.checked)}
+                  style={{ accentColor: '#8f2c24' }}
+                />
+                Lowercase (a-z)
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#8f2c24' }}>
+                <input
+                  type="checkbox"
+                  checked={includeNumbers}
+                  onChange={(e) => setIncludeNumbers(e.target.checked)}
+                  style={{ accentColor: '#8f2c24' }}
+                />
+                Numbers (0-9)
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#8f2c24' }}>
+                <input
+                  type="checkbox"
+                  checked={includeSymbols}
+                  onChange={(e) => setIncludeSymbols(e.target.checked)}
+                  style={{ accentColor: '#8f2c24' }}
+                />
+                Symbols (!@#$%^&*)
+              </label>
+            </div>
+          </div>
+
+          <button className="form-button" onClick={generatePassword}>
+            Generate Password
+          </button>
+
+          {password && (
+            <div className="form-group" style={{ marginTop: '20px' }}>
+              <label className="form-label">Generated Password:</label>
+              <div style={{
+                display: 'flex',
+                gap: '10px',
+                alignItems: 'center'
+              }}>
+                <input
+                  type="text"
+                  value={password}
+                  readOnly
+                  className="form-input"
+                  style={{
+                    color: '#8f2c24',
+                    fontFamily: 'monospace',
+                    fontSize: '1.2em'
+                  }}
+                />
+                <button
+                  className="form-button"
+                  onClick={copyToClipboard}
+                  style={{
+                    width: 'auto',
+                    padding: '12px 20px',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {copied ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
